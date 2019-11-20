@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -30,6 +31,7 @@ class UserController extends Controller
             $user->emailVerified = $request->emailVerified;
             $user->picUrl = $request->picUrl;
             $user->save();
+            $this->sendMail($request->email);
             return response()->json([
                 'error' => ['code' => Response::HTTP_OK, 'message' => "false"]
                 , 'user' => $user
@@ -80,7 +82,7 @@ class UserController extends Controller
 
     public function allUsers(Request $request)
     {
-        $users = DB::table('users')->where('city',$request->city)->get();
+        $users = DB::table('users')->where('city', $request->city)->get();
 
         return response()->json([
             'error' => ['code' => Response::HTTP_OK, 'message' => "false"],
@@ -90,4 +92,18 @@ class UserController extends Controller
 
     }
 
+    public function sendMail($email)
+    {
+
+        $data = [
+            'data' => "http://chatapp.com/sdfdsfsdfsdfsdfsdfsdfsfsdfsdfsdfsdfsdfsdfs",
+
+        ];
+//        $email="m.aliahmed0@gmail.com";
+        Mail::send('mail', ["data1" => $data], function ($message) use ($email) {
+            $message->to($email)->subject("New User Registration");
+            $message->from('chat@gmail.com', 'Chat App');
+        });
+
+    }
 }

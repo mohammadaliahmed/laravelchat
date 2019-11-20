@@ -26,6 +26,7 @@ Route::group(['prefix' => 'user'], function () {
 });
 
 Route::Post('allUsers', 'UserController@allUsers');
+Route::Get('sendMail', 'UserController@sendMail');
 
 Route::group(['prefix' => 'room'], function () {
 
